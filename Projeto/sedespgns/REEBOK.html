@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="styleloc.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <title>Reebok</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'poppins', sans-serif;
+    }
+    body {
+        background-color: white; /* Cor de fundo do corpo */
+        margin: 0;
+        padding: 0;
+    }
+    #mapid { 
+        height: 700px;
+        width: 100%;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 24px;
+        color: #000000; /* Cor do texto do título */
+    }
+    h2 {
+        text-align: center;
+        font-size: 14px;
+        color: #000000; /* Cor do texto do título */
+    }
+    #map-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh; /* Altura ajustada para ocupar 80% da altura da janela */
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Essa é a localização da sede da Reebok:</h1>
+    <h2>latitude: -34.076674, longitude: 22.170925</h2>
+    <div id="mapid"></div>
+    
+    <script>
+        var map;
+    
+        const rbkCoords = {
+            latitude: -34.076674,
+            longitude: 22.170925
+        };
+    
+        function success(pos) {
+            console.log(pos.coords.latitude, pos.coords.longitude);
+    
+            if (map === undefined) {
+                map = L.map('mapid').setView([rbkCoords.latitude, rbkCoords.longitude], 13);
+            } else {
+                map.remove();
+                map = L.map('mapid').setView([rbkCoords.latitude, rbkCoords.longitude], 13);
+            }
+    
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+    
+            L.marker([rbkCoords.latitude, rbkCoords.longitude]).addTo(map)
+                .bindPopup('Self Catering in Reebok, Mossel Bay')
+                .openPopup();
+        }
+    
+        function error(err) {
+            console.log(err);
+        }
+    
+        var watchID = navigator.geolocation.watchPosition(success, error, {
+            enableHighAccuracy: true,
+            timeout: 5000
+        });
+    </script>
+    
+</body>
+</html>
